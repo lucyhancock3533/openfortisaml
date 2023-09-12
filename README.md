@@ -2,20 +2,20 @@
 
 Lucy Hancock <lucy@leh.dev> 2023, absolutely no copyrights
 
-Opens a firefox session and extracts the SVPNCOOKIE to use to authenticate with FortiVPN
+Opens a Webkit2GTK window and extracts the SVPNCOOKIE to use to authenticate with FortiVPN
 
-Functionality is derived from ****FortiClient with superfluous functionality removed
+Functionality is derived from ****FortiClient
 
 ****FortiClient: https://gist.github.com/nonamed01/0961d8a79955206ebdc00abcaa56aefe
 
-One day I might also replicate finding the Firefox profile. Today is not that day.
+Once logged into the VPN exit the GTK window and login will proceed.
 
 ## License
  
 Licensed under CC0: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
-All code is dedicated to the public domain, where possible, and all liabilites are waived
+All code is dedicated to the public domain, where possible, and all liabilities are waived
 
 ## Requirements
 
-Requires lz4json for lz4jsoncat to read the cookies file, and openfortivpn with support for the --cookies flag.
+Requires GTK3 and Webkit2GTK to read the cookies, and openfortivpn with support for the --cookies flag.
