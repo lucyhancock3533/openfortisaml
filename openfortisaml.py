@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
  
-# OpenFortiSAML
+# OpenFortiSAML v0.3
 # Lucy Hancock <lucy@leh.dev> 2023, absolutely no copyrights
 # Opens a firefox session and extracts the SVPNCOOKIE to use to authenticate with FortiVPN
 # Functionality is derived from ****FortiClient with superfluous functionality removed
@@ -16,9 +16,9 @@ import subprocess
 import json
  
 from pathlib import Path
- 
+
 if __name__ == "__main__":
-    print('OpenFortiSAML')
+    print('OpenFortiSAML v0.3')
     parser = argparse.ArgumentParser(prog='OpenFortiSAML')
     parser.add_argument('-f', '--firefox-profile', type=str, dest='fp', required=True)
     parser.add_argument('-s', '--server', type=str, dest='server', required=True)
@@ -27,6 +27,7 @@ if __name__ == "__main__":
     arg = parser.parse_args()
     print(arg)
     user = os.getlogin()
+    Path('/tmp/.openfortisaml-cookie').unlink(missing_ok=True)
  
     if not Path(arg.fp).is_dir():
         print("Firefox profile doesn't seem to exist")
@@ -72,12 +73,14 @@ if __name__ == "__main__":
     if cookie is None:
         print('SVPNCOOKIE not found')
         exit(1)
- 
+
+    Path('/tmp/.openfortisaml-cookie').touch()
+    os.chmod('/tmp/.openfortisaml-cookie', 0o600)
     with open('/tmp/.openfortisaml-cookie', 'w') as f:
         f.write(f'SVPNCOOKIE={cookie}')
-    os.chmod('/tmp/.openfortisaml-cookie', 0o600)
  
-    ovpncmd = ['cat', '/tmp/.openfortisaml-cookie', '|', 'sudo', 'openfortivpn', f'{arg.server}:{arg.port}', '--cookie-on-stdin']
+    ovpncmd = ['cat', '/tmp/.openfortisaml-cookie', '|', 'sudo',
+               'openfortivpn', f'{arg.server}:{arg.port}', '--cookie-on-stdin']
     try:
         subprocess.run(['bash', '-c', ' '.join(ovpncmd)])
     except KeyboardInterrupt:
